@@ -14,7 +14,11 @@ class App extends Component {
         >
           Toggle
         </button>
-        {this.state.show && <Child />}
+        {this.state.show && (
+          <>
+            <Child />
+          </>
+        )}
       </>
     );
   }
