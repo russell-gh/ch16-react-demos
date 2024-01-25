@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Spinner from "./components/Spinner";
-import "./App.css";
+import "./App.scss";
 import axios from "axios";
 import Interface from "./components/Interface";
 
