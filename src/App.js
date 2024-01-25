@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import Interface from "./components/Interface";
 
 class App extends Component {
   state = {
@@ -15,6 +16,14 @@ class App extends Component {
   };
 
   onAddClick = () => {
+    const isDuplicate = this.state.todos.some((todo) => {
+      return todo.title === this.state.todoInput;
+    });
+
+    if (isDuplicate) {
+      return;
+    }
+
     const todos = [...this.state.todos];
     todos.push({ title: this.state.todoInput, todo: false });
     this.setState({ todos });
@@ -52,22 +61,15 @@ class App extends Component {
     });
 
     return (
-      <>
-        <input type="text" onInput={this.onTodoInput} />
-        <button onClick={this.onAddClick}>Add</button>
-        <h1>Total todos: {totalTodo}</h1>
-        {todos.map((todo) => {
-          return (
-            <div className={todo.done ? "done" : "undone"}>
-              <p onClick={() => this.onTodoToggleClick(todo.title)}>
-                {todo.title}
-              </p>
-              <button onClick={() => this.onDeleteClick(todo.title)}>X</button>
-            </div>
-          );
-        })}
-        <button onClick={this.onDeleteAll}>Delete ALL</button>
-      </>
+      <Interface
+        totalTodo={totalTodo}
+        onTodoInput={this.onTodoInput}
+        onAddClick={this.onAddClick}
+        todos={this.state.todos}
+        onTodoToggleClick={this.onTodoToggleClick}
+        onDeleteClick={this.onDeleteClick}
+        onDeleteAll={this.onDeleteAll}
+      />
     );
   }
 }
