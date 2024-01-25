@@ -1,19 +1,29 @@
 import React, { Component } from "react";
 
 class App extends Component {
-  onBtnClick = () => {
-    console.log("Btn clicked");
+  state = { todos: ["Clean car", "Buy bread", "Feed fish"] };
+
+  onTodoInput = (e) => {
+    this.setState({ todoInput: e.target.value });
   };
 
-  onTextInput = (e) => {
-    console.log("User typed: ", e);
+  onAddClick = () => {
+    const todos = [...this.state.todos];
+    todos.push(this.state.todoInput);
+    this.setState({ todos });
   };
 
   render() {
+    console.log(this.state);
+    const { todos } = this.state;
+
     return (
       <>
-        <button onClick={this.onBtnClick}>Click Me</button>
-        <input type="text" onInput={this.onTextInput} />
+        <input type="text" onInput={this.onTodoInput} />
+        <button onClick={this.onAddClick}>Add</button>
+        {todos.map((todo) => {
+          return <p>{todo}</p>;
+        })}
       </>
     );
   }
