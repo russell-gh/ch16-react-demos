@@ -1,25 +1,23 @@
 import React, { Component } from "react";
+import styles from "./App.module.css";
 import Child from "./components/Child";
 
 class App extends Component {
-  state = { show: true };
+  state = { done: true };
 
   render() {
     return (
-      <>
+      <div className={styles.done}>
+        <p>Hello World</p>
+        <Child />
         <button
           onClick={() => {
-            this.setState({ show: !this.state.show });
+            this.setState({ done: !this.state.done });
           }}
         >
           Toggle
         </button>
-        {this.state.show && (
-          <>
-            <Child />
-          </>
-        )}
-      </>
+      </div>
     );
   }
 }
