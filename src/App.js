@@ -1,34 +1,42 @@
 import React, { Component } from "react";
+import Todo from "./components/Todo";
 
 class App extends Component {
-  // state = { todos: ["Clean car", "Buy milk"] };
-  state = { todos: [] };
+  state = {
+    todos: [
+      { title: "Clean car", done: false },
+      { title: "Buy milk", done: true },
+      { title: "Buy cheese", done: false },
+    ],
+  };
+
+  onToggleDone = (item) => {
+    console.log(item);
+    const index = this.state.todos.findIndex((todo) => {
+      todo.title === item;
+    });
+    const todos = [...this.state.todos];
+    todos[index].done = !todos[index].done;
+    this.setState({ todos });
+  };
 
   render() {
-    const { todos } = this.state;
-
-    // if (!todos.length) {
-    //   return <p>No todos</p>;
-    // }
-
-    // return todos.map((todo) => {
-    //   return <p>{todo}</p>;
-    // });
-
-    //ternary
-    // return !todos.length ? (
-    //   <p>No todos</p>
-    // ) : (
-    //   todos.map((todo) => {
-    //     return <p>{todo}</p>;
-    //   })
-    // );
+    let count = 0;
+    this.state.todos.forEach((todo) => {
+      if (todo.done) count++;
+    });
 
     return (
       <>
-        {!todos.length && <p>No todos</p>}
-        {todos.map((todo) => {
-          return <p>{todo}</p>;
+        <p>Total tasks done: {count}</p>
+        {this.state.todos.map((todo) => {
+          return (
+            <Todo
+              todo={todo.title}
+              done={todo.done}
+              onToggleDone={this.onToggleDone}
+            />
+          );
         })}
       </>
     );
