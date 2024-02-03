@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+/* import React, { Component } from "react";
 
 class AlbumItem extends Component {
   render() {
@@ -16,4 +16,4 @@ class AlbumItem extends Component {
   }
 }
 
-export default AlbumItem;
+export default AlbumItem; */
