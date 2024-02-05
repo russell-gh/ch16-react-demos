@@ -13,29 +13,35 @@ class Character extends Component {
       image,
       index,
       visible,
+      highlight,
       deleted,
+      liked,
+      toggleLikeDelete,
     } = this.props;
     return (
       <div
         key={index}
         className="character"
-        style={!{ visible } ? { display: "none" } : {}}
+        style={{ display: !visible ? "none" : "flex", paddingBottom: "20px",
+        alignItems: "center"}}
       >
         <div>
-          <Name name={character} />
-        </div>
-
-          <Img img={image} />
-
-        <div>
-          <Quote quote={quote} />
+          <Img img={image} direction={characterDirection} />
         </div>
         <div>
-          <Controls index={index}/>
-        </div>
+          <Name name={character} highlight={highlight} />
+          <Quote quote={quote} highlight={highlight} />
 
-        <div className="quote">{quote}</div>
-        <h2 className="name">{character}</h2>
+          <div>
+            <Controls
+              index={index}
+              liked={liked}
+              visible={visible}
+              deleted={deleted}
+              toggleLikeDelete={toggleLikeDelete}
+            />
+          </div>
+        </div>
       </div>
     );
   }

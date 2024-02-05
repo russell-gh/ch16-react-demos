@@ -3,12 +3,14 @@ class Img extends Component {
   render() {
     return (
       <>
-        <image
+        <img
+          style={
+            this.props.direction == "Right" ? { transform: "scale(-1,1)" } : {}
+          }
           src={this.props.img}
-          alt="simpsons-img"
+          alt="simpsons-character"
           width="100"
-          height="100"
-        ></image>
+        />
       </>
     );
   }
