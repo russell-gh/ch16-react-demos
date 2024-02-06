@@ -1,33 +1,64 @@
 import React, { Component } from "react";
-import axios from "axios";
-import Album from "./components/Album";
+import Joi from "joi";
 
 class App extends Component {
   state = {};
 
-  async componentDidMount() {
-    const { data } = await axios.get(
-      `https://jsonplaceholder.typicode.com/photos`
-    );
-    data.length = 50;
-    this.setState({ album: data });
-  }
+  schema = {
+    name: Joi.string().min(3).max(10),
+    username: Joi.string().min(5),
+    email: Joi.string()
+      .email({ tlds: { allow: false } })
+      .required(),
+  };
 
-  onDeleteItem = (id) => {
-    const album = [...this.state.album];
-    const index = album.findIndex((item) => item.id === id);
-    album.splice(index, 1);
-    this.setState({ album });
+  onUserInput = async (e) => {
+    const userInput = { ...this.state.userInput };
+    userInput[e.target.id] = e.target.value;
+
+    this.setState({ userInput }); //async
+
+    const _joiInstance = Joi.object(this.schema);
+
+    //
+    try {
+      await _joiInstance.validateAsync(this.state.userInput);
+      this.setState({ errors: undefined });
+    } catch (e) {
+      console.log(e);
+
+      const errorsMod = {};
+      e.details.forEach((error) => {
+        errorsMod[error.context.key] = error.message;
+      });
+
+      this.setState({ errors: errorsMod });
+    }
   };
 
   render() {
     console.log(this.state);
-
-    if (!this.state.album) {
-      return <p>Loading....</p>;
-    }
-
-    return <Album album={this.state.album} onDeleteItem={this.onDeleteItem} />;
+    return (
+      <div>
+        <form onInput={this.onUserInput}>
+          <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" />
+            <p>{this.state.errors && this.state.errors.name}</p>
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" />
+            <p>{this.state.errors && this.state.errors.email}</p>
+          </div>
+          <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" />
+            <p>{this.state.errors && this.state.errors.username}</p>
+          </div>
+        </form>
+      </div>
+    );
   }
 }
 
