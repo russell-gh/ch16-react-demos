@@ -1,19 +1,23 @@
-import React, { Component } from "react";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Main from "./components/Main";
+import React from "react";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import { Routes, Route } from "react-router-dom";
+import Error from "./pages/Error";
+import Nav from "./pages/Nav";
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <Header />
-        <aside></aside>
-        <Main />
-        <Footer />
-      </div>
-    );
-  }
-}
+const App = () => {
+  return (
+    <>
+      <Nav />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact/:country" element={<Contact />} />
+        <Route path="*" element={<Error />} />
+      </Routes>
+    </>
+  );
+};
 
 export default App;
