@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import react, { useState } from "react";
 import Joi from "joi";
 
-class App extends Component {
-  state = {};
+const App = () => {
+  const [userInput, setUserInput] = useState({});
+  const [errors, setErrors] = useState();
 
-  schema = {
+  const schema = {
     name: Joi.string().min(3).max(10),
     username: Joi.string().min(5),
     email: Joi.string()
@@ -12,54 +13,46 @@ class App extends Component {
       .required(),
   };
 
-  onUserInput = async (e) => {
-    const userInput = { ...this.state.userInput };
-    userInput[e.target.id] = e.target.value;
-
-    this.setState({ userInput }); //async
-
-    const _joiInstance = Joi.object(this.schema);
+  const onUserInput = async (e) => {
+    const newState = { ...userInput, [e.target.id]: e.target.value };
+    setUserInput(newState);
+    const _joiInstance = Joi.object(schema);
 
     //
     try {
-      await _joiInstance.validateAsync(this.state.userInput);
-      this.setState({ errors: undefined });
+      await _joiInstance.validateAsync(newState);
+      setErrors(undefined);
     } catch (e) {
-      console.log(e);
-
       const errorsMod = {};
       e.details.forEach((error) => {
         errorsMod[error.context.key] = error.message;
       });
 
-      this.setState({ errors: errorsMod });
+      setErrors(errorsMod);
     }
   };
-
-  render() {
-    console.log(this.state);
-    return (
-      <div>
-        <form onInput={this.onUserInput}>
-          <div>
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" />
-            <p>{this.state.errors && this.state.errors.name}</p>
-          </div>
-          <div>
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" />
-            <p>{this.state.errors && this.state.errors.email}</p>
-          </div>
-          <div>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" />
-            <p>{this.state.errors && this.state.errors.username}</p>
-          </div>
-        </form>
-      </div>
-    );
-  }
-}
+  console.log(errors);
+  return (
+    <div>
+      <form onInput={onUserInput}>
+        <div>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" />
+          <p>{errors && errors.name}</p>
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" />
+          <p>{errors && errors.email}</p>
+        </div>
+        <div>
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" />
+          <p>{errors && errors.username}</p>
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export default App;
