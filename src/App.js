@@ -1,5 +1,6 @@
 import react, { useState } from "react";
 import Joi from "joi";
+import Input from "./components/input/Input";
 
 const App = () => {
   const [userInput, setUserInput] = useState({});
@@ -31,25 +32,34 @@ const App = () => {
       setErrors(errorsMod);
     }
   };
-  console.log(errors);
+  console.log(userInput);
   return (
     <div>
       <form onInput={onUserInput}>
-        <div>
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" />
-          <p>{errors && errors.name}</p>
-        </div>
-        <div>
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" />
-          <p>{errors && errors.email}</p>
-        </div>
-        <div>
-          <label for="username">Username</label>
-          <input type="text" id="username" name="username" />
-          <p>{errors && errors.username}</p>
-        </div>
+        <Input name="name" onUserInput={onUserInput} error={errors.name} />
+        <Input
+          name="email"
+          type="email"
+          onUserInput={onUserInput}
+          error={errors.email}
+        />
+        <Input
+          name="username"
+          onUserInput={onUserInput}
+          error={errors.username}
+        />
+        {/* <Input
+          name="currency"
+          onUserInput={onUserInput}
+          error={errors.currency}
+          options={["one", "two", "three", "four"]}
+        />
+        <Input
+          name="age"
+          onUserInput={onUserInput}
+          error={errors.age}
+          options={[1, 3, 5, 7, 8]}
+        /> */}
       </form>
     </div>
   );
