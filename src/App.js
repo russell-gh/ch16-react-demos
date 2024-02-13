@@ -1,45 +1,43 @@
-// import React from "react";
-
-// const App = () => {
-//   const onClick = () => {
-//     more();
-//   };
-
-//   const more = () => {
-//     console.log("Click");
-//   };
-
-//   return <button onClick={onClick}>Click me</button>;
-// };
-
-// export default App;
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Todo from "./components/Todo";
+import Controls from "./components/Controls";
 
 const App = () => {
-  const [simpsons, setSimpsons] = useState();
+  const [todos, setTodos] = useState();
+  const [search, setSearch] = useState("");
 
-  const getApiData = async () => {
-    const { data } =
-      await axios.get(`https://thesimpsonsquoteapi.glitch.me/quotes?count=50
-    `);
-    setSimpsons(data);
+  const getTodos = async () => {
+    const { data } = await axios.get(
+      `https://jsonplaceholder.typicode.com/todos`
+    );
+
+    setTodos(data);
   };
 
-  useEffect(
-    () => {
-      getApiData();
-    },
-    [] //means run once
-  );
+  useEffect(() => {
+    getTodos();
+  }, []);
+
+  const onInput = (e) => {
+    setSearch(e.target.value);
+  };
+
+  //quit if no data
+  if (!todos) {
+    return <p>Loading...</p>;
+  }
+
+  const filtered = todos.filter((todo) => {
+    return todo.title.toLowerCase().includes(search.toLowerCase());
+  });
 
   return (
     <>
-      {simpsons &&
-        simpsons.map((char) => {
-          return <p>{char.quote}</p>;
-        })}
+      <Controls onInput={onInput} />
+      {filtered.map((todo) => {
+        return <Todo {...todo} />;
+      })}
     </>
   );
 };
