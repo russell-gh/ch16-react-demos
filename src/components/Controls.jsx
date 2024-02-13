@@ -1,8 +1,11 @@
-const Controls = ({ onInput }) => {
+const Controls = ({ onSearchInput, onNewInput, onNewBtn }) => {
   return (
     <>
       <label for="search">Search</label>
-      <input onInput={onInput} type="text" id="search" name="search" />
+      <input onInput={onSearchInput} type="text" id="search" name="search" />
+      <label for="new">New todo</label>
+      <input onInput={onNewInput} type="text" id="new" name="new" />
+      <button onClick={onNewBtn}>Add</button>
     </>
   );
 };

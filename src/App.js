@@ -6,6 +6,7 @@ import Controls from "./components/Controls";
 const App = () => {
   const [todos, setTodos] = useState();
   const [search, setSearch] = useState("");
+  const [newTodo, setNewTodo] = useState("");
 
   const getTodos = async () => {
     const { data } = await axios.get(
@@ -19,8 +20,23 @@ const App = () => {
     getTodos();
   }, []);
 
-  const onInput = (e) => {
+  const onSearchInput = (e) => {
     setSearch(e.target.value);
+  };
+
+  const onNewInput = (e) => {
+    setNewTodo(e.target.value);
+  };
+
+  const onNewBtn = () => {
+    const copy = [...todos];
+    copy.push({
+      userId: 1,
+      id: Math.random(),
+      title: newTodo,
+      completed: false,
+    });
+    setTodos(copy);
   };
 
   //quit if no data
@@ -32,9 +48,14 @@ const App = () => {
     return todo.title.toLowerCase().includes(search.toLowerCase());
   });
 
+  console.log(todos);
   return (
     <>
-      <Controls onInput={onInput} />
+      <Controls
+        onSearchInput={onSearchInput}
+        onNewInput={onNewInput}
+        onNewBtn={onNewBtn}
+      />
       {filtered.map((todo) => {
         return <Todo {...todo} />;
       })}
