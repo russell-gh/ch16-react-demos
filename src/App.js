@@ -1,30 +1,41 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import Simpsons from "./components/Simpsons";
 
 const App = () => {
-  const [weather, setWeather] = useState();
-  const [location] = useState("London");
-  console.log("Component re rendered");
+  const [simpsons, setSimpsons] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const getWeather = useCallback(async () => {
+  const getApiData = async () => {
     const { data } = await axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?q=${location},UK&appid=37b29f091f8754cf8600dea56dee3863`
+      `https://thesimpsonsquoteapi.glitch.me/quotes?count=50`
     );
-    console.log(data);
-    setWeather(data);
-  }, [location]);
+    setSimpsons(data);
+  };
 
   useEffect(() => {
-    getWeather();
-  }, [getWeather]);
+    getApiData();
+  }, []);
 
-  console.log(weather);
+  console.log(simpsons);
 
-  if (!weather) return <p>Loading....</p>;
+  const onInput = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  if (!simpsons) return <p>Loading....</p>;
+
+  //filter it around here
+  let filtered = [...simpsons];
+  filtered = filtered.filter((item) => {
+    return item.character.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   return (
     <>
-      <p>{Math.round(weather.main.temp - 273.15)}</p>
+      <input type="text" onInput={onInput} />
+      <Simpsons simpsons={filtered} />
     </>
   );
 };
