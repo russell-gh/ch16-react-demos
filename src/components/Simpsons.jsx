@@ -1,6 +1,11 @@
 const Simpsons = ({ simpsons }) => {
   return simpsons.map((simpson) => {
-    return <p>{simpson.quote}</p>;
+    return (
+      <div style={{ backgroundColor: "red", margin: "10px" }}>
+        <p>{simpson.character}</p>
+        <p>{simpson.quote}</p>
+      </div>
+    );
   });
 };
 
