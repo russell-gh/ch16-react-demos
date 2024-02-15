@@ -1,41 +1,32 @@
 import React from "react";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Simpsons from "./components/Simpsons";
+import { useState } from "react";
 
 const App = () => {
-  const [simpsons, setSimpsons] = useState();
   const [searchTerm, setSearchTerm] = useState("");
-
-  const getApiData = async () => {
-    const { data } = await axios.get(
-      `https://thesimpsonsquoteapi.glitch.me/quotes?count=50`
-    );
-    setSimpsons(data);
-  };
-
-  useEffect(() => {
-    getApiData();
-  }, []);
-
-  console.log(simpsons);
+  const [originalCardNumber, setOriginalCardNumber] = useState("");
 
   const onInput = (e) => {
-    setSearchTerm(e.target.value);
+    setSearchTerm(
+      "*".repeat(originalCardNumber.length - 1) +
+        originalCardNumber[originalCardNumber.length - 1]
+    );
   };
 
-  if (!simpsons) return <p>Loading....</p>;
+  const onKeyDown = (e) => {
+    //if backspace then remove final char
 
-  //filter it around here
-  let filtered = [...simpsons];
-  filtered = filtered.filter((item) => {
-    return item.character.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+    setOriginalCardNumber(originalCardNumber + e.key);
+  };
 
+  console.log(searchTerm);
   return (
     <>
-      <input type="text" onInput={onInput} />
-      <Simpsons simpsons={filtered} />
+      <input
+        type="text"
+        onInput={onInput}
+        onKeyDown={onKeyDown}
+        value={searchTerm}
+      />
     </>
   );
 };
